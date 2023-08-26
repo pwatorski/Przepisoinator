@@ -5,17 +5,32 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Przepisoinator"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="400">
     <Grid>
-        <RichTextBox Margin="0,101,400,0">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="RichTextBox"/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
-        <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="400" FontSize="16" FontWeight="Bold"/>
-        <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="400" Margin="0,28,0,0" Height="68"/>
+        <StackPanel Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" CanVerticallyScroll="True">
+            <Grid Name="grid_titleBar" VerticalAlignment="Top" Margin="0,0,0,4">
+                <TextBox TextWrapping="Wrap" Text="Nazwa przepisu" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Height="24" Margin="0,0,110,0"/>
+                <Button Name="button_edit" Content="Edytuj" Width="50" Height="24" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,52,0"/>
+                <Button Name="button_popout" Content="Odczep" Width="50" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="350,0,0,0" Click="button_popout_Click"/>
+            </Grid>
+
+            <StackPanel Name="stackPanel_ingredients">
+
+            </StackPanel>
+            <RichTextBox Margin="0,4,0,0">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+                    </Paragraph>
+                    <Paragraph>
+                        <Run Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+                    </Paragraph>
+                    <Paragraph>
+                        <Run Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+        </StackPanel>
 
     </Grid>
 </UserControl>

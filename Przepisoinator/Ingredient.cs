@@ -54,5 +54,10 @@ namespace Przepisoinator
 
             return mostSImilar;
         }
+
+        internal string NumberName(double value)
+        {
+            return Name;
+        }
     }
 }

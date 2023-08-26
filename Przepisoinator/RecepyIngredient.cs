@@ -11,6 +11,7 @@ namespace Przepisoinator
     {
         public long IngredientId { get; set; }
         public long UnitId { get; set; }
+        public string ActiveName { get => Ingredient.NumberName(Value); }
         public Ingredient Ingredient;
         public MeasurementUnit Unit;
         public double Value { get; set; }

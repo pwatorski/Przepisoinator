@@ -14,10 +14,14 @@ namespace Przepisoinator
         public long ID { get; protected set; } = 0;
         public List<RecepyIngredient> Ingredients { get; set; }
         public int ServingCount { get; set; }
+        public List<string> Tags { get; set; }
+        public double Rating { get; set; }
+        public bool Tried { get; set; }
 
         public Recepy() 
         {
             Ingredients = new List<RecepyIngredient>();
+            Tags = new List<string>();
         }
 
         public string ToJson()
