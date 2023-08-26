@@ -24,27 +24,23 @@ namespace Przepisoinator
         {
             InitializeComponent();
 
-            List<Recepy> items = new List<Recepy>
+            
+            mainTabControl.Items.Add(new ClosableTabItem()
             {
-                new Recepy() { Name = "Complete this WPF tutorial" },
-                new Recepy() { Name = "Learn C#" },
-                new Recepy() { Name = "Wash the car" }
-            };
+                Title = "Sól z solą"
+            });
 
-            listBox_recepies.ItemsSource = items;
+            //BaseGrid.Children.Add(new RecepyView());
 
             MeasurementUnit.SaveAllToDirectory("measurements");
         }
 
 
-        private void rtb_test_TestChanged(object sender, TextChangedEventArgs e)
+        private void CloseTabImage_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            TextRange textRange = new TextRange(
-                rtb_test.Document.ContentStart,
-                rtb_test.Document.ContentEnd
-            );
-
-            Console.WriteLine(textRange.Text);
+            var closeImage = (Image)sender;
+            var tab = (TabItem)closeImage.Parent;
+            mainTabControl.Items.RemoveAt(tab.TabIndex);
         }
     }
 }

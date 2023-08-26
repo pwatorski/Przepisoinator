@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Przepisoinator"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <ListBox HorizontalContentAlignment="Stretch" Margin="0,0,469,0" d:ItemsSource="{d:SampleData ItemCount=5}" Name="listBox_recepies">
+    <Grid Name="BaseGrid">
+        <ListBox HorizontalContentAlignment="Stretch" Margin="644,217,10,84" d:ItemsSource="{d:SampleData ItemCount=5}" Name="listBox_recepies">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0,2">
@@ -20,12 +20,10 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <RichTextBox Margin="369,68,0,0" TextChanged="rtb_test_TestChanged" Name="rtb_test">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="RichTextBox"/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
+        <TabControl Name="mainTabControl">
+            <local:ClosableTabItem Closable="False" Title="Menu">
+                
+            </local:ClosableTabItem>
+        </TabControl>
     </Grid>
 </Window>
