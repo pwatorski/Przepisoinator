@@ -21,9 +21,9 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <TabControl Name="mainTabControl">
-            <local:ClosableTabItem Closable="False" Title="Menu">
+            <TabItem Header="Menu" Height="27" Margin="0,0,0,0">
                 
-            </local:ClosableTabItem>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

@@ -18,11 +18,21 @@ namespace Przepisoinator
     /// <summary>
     /// Logika interakcji dla klasy CloseableHeader.xaml
     /// </summary>
-    public partial class CloseableHeader : UserControl
+    public partial class RecepyHeader : UserControl
     {
-        public CloseableHeader()
+        RecepyTabItem Parent;
+        public RecepyHeader(RecepyTabItem parent)
         {
             InitializeComponent();
+            Parent = parent;
+        }
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                Parent.OpenNewWindow();
+            }
         }
     }
 }

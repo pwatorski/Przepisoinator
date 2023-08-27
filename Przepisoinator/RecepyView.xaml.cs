@@ -22,10 +22,14 @@ namespace Przepisoinator
     {
         public bool EditMode { get; protected set; }
         public bool Windowed { get; protected set; }
-        public RecepyView()
+        public Recepy Recepy;
+        public RecepyView(Recepy recepy=null)
         {
             InitializeComponent();
             stackPanel_ingredients.Children.Add(new IngrediebtView(this));
+            if (recepy == null)
+                recepy = Recepy.BasicRecepy;
+            Recepy = recepy;
         }
 
         internal void AddNewIngredient(IngrediebtView ingrediebtView)

@@ -24,8 +24,16 @@ namespace Przepisoinator
         {
             InitializeComponent();
 
-            
-            mainTabControl.Items.Add(new ClosableTabItem()
+
+            mainTabControl.Items.Add(new RecepyTabItem(new RecepyView())
+            {
+                Title = "Sól z solą"
+            });
+            mainTabControl.Items.Add(new RecepyTabItem(new RecepyView())
+            {
+                Title = "Sól z soląaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            });
+            mainTabControl.Items.Add(new RecepyTabItem(new RecepyView())
             {
                 Title = "Sól z solą"
             });
