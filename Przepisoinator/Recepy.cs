@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows.Documents;
+using System.Windows.Markup;
+using System.Windows.Media.TextFormatting;
 
 namespace Przepisoinator
 {
@@ -17,8 +22,11 @@ namespace Przepisoinator
             Ingredients = new List<RecepyIngredient>() { new RecepyIngredient(Ingredient.BasicIngredient, MeasurementUnit.BasicUnit, 1)},
 
         };
-        public string Name { get; set; } = "???";
-        public string Description { get; set; } = "???";
+        public string Name { get; set; } = "";
+        public string Description { get; set; } = "";
+
+        [JsonIgnore]
+        public FlowDocument DescriptionFlow { get; set; }
         public long ID { get; protected set; } = 0;
         public List<RecepyIngredient> Ingredients { get; set; }
         public int ServingCount { get; set; }
@@ -28,18 +36,38 @@ namespace Przepisoinator
 
         public Recepy() 
         {
+            DescriptionFlow = new FlowDocument();
             Ingredients = new List<RecepyIngredient>();
             Tags = new List<string>();
         }
 
         public string ToJson()
         {
+            FileStream xamlFile = new FileStream("x", FileMode.Create, FileAccess.ReadWrite);
+            System.Xml.XmlReader.Create(DescriptionFlow.ToString());
             return JsonSerializer.Serialize(this, Misc.JsonOptions);
         }
 
         public static Recepy? FromJson(string json)
         {
             return JsonSerializer.Deserialize<Recepy>(json);
+        }
+
+        internal void RemoveTag(int index)
+        {
+            if(index > 0 && index < Ingredients.Count)
+                Tags.RemoveAt(index);
+        }
+
+        internal void EditTag(int index, string text)
+        {
+            if (index > 0 && index < Ingredients.Count)
+                Tags[index] = text.Trim();
+        }
+
+        public static Recepy GetEmptyRecepy()
+        {
+            return new Recepy();
         }
     }
 }

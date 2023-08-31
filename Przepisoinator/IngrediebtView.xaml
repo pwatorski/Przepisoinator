@@ -1,24 +1,45 @@
-﻿<UserControl x:Class="Przepisoinator.IngrediebtView"
+﻿<UserControl x:Class="Przepisoinator.IngredientView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Przepisoinator"
              mc:Ignorable="d" 
-             HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,1,0,1" Height="20">
-    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-        <StackPanel Orientation="Horizontal" Height="20">
-            <TextBox Name="textBox_name" TextWrapping="Wrap" Text="Dodaj składnik" VerticalAlignment="Top" Height="20" Margin="0,0,0,0" HorizontalAlignment="Left" MinWidth="100"
-                     KeyUp="textBox_name_KeyUp"/>
-            <TextBox Name="textBox_amount" Text="1" Margin="2,0,0,0" MinWidth="30" TextAlignment="Right"/>
-            <ComboBox Name="comboBox_unit" MinWidth="30" HorizontalAlignment="Left" Margin="2,0,0,0" IsEditable="True">
+             HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,1,0,1" Height="Auto"
+             Focusable="True">
+    <Grid Name="grid_base" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="True">
+        <TextBox Name="textBox_fullText" Text="Dodaj składnik..." 
+                     TextWrapping="Wrap" VerticalAlignment="Top" Height="18" 
+                     Margin="0,1,0,1" HorizontalAlignment="Left" MinWidth="100"
+                     KeyUp="textBox_name_KeyUp" Focusable="True"
+                     Foreground="Gray" BorderThickness="0,0,0,0"/>
+        <StackPanel Name="stackPanel_base" Orientation="Horizontal" Height="22" Focusable="True" Visibility="Visible">
+            <TextBox Name="textBox_name" Text="Dodaj składnik..." 
+                     TextWrapping="Wrap" VerticalAlignment="Top" Height="20" 
+                     Margin="0,1,0,0" HorizontalAlignment="Left" MinWidth="100"
+                     KeyUp="textBox_name_KeyUp" Focusable="True"
+                     Foreground="Gray" FontWeight="Light" FontStyle="Italic"/>
+            <TextBox Name="textBox_amount" Text="1" Height="20" Margin="2,1,0,0" MinWidth="30" TextAlignment="Right" HorizontalAlignment="Left" VerticalAlignment="Top" TextChanged="textBox_amount_TextChanged"/>
+            <ComboBox Name="comboBox_unit" Height="22" MinWidth="50" HorizontalAlignment="Left" Margin="2,0,0,0" SelectionChanged="comboBox_unit_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding ActiveName}" />
+                        <TextBlock Text="{Binding Symbol}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <Button Name="button_remove" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="20" Margin="2,0,0,0" Click="button_remove_Click"/>
+            <Button 
+                Name="button_remove" 
+                Content="X" 
+                HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Height="20" Width="20" Margin="2,1,0,0" 
+                Click="button_remove_Click" VerticalContentAlignment="Center"
+                >
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
         </StackPanel>
         
 

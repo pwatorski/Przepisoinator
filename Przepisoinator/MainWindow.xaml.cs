@@ -27,18 +27,10 @@ namespace Przepisoinator
 
             mainTabControl.Items.Add(new RecepyTabItem(new RecepyView())
             {
-                Title = "Sól z solą"
-            });
-            mainTabControl.Items.Add(new RecepyTabItem(new RecepyView())
-            {
-                Title = "Sól z soląaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-            });
-            mainTabControl.Items.Add(new RecepyTabItem(new RecepyView())
-            {
-                Title = "Sól z solą"
+                Title = "Sól z solą",
             });
 
-            //BaseGrid.Children.Add(new RecepyView());
+            //BaseGrid.Children.Add(new parentRecepy());
 
             MeasurementUnit.SaveAllToDirectory("measurements");
         }

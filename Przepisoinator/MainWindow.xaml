@@ -20,9 +20,8 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TabControl Name="mainTabControl">
+        <TabControl Name="mainTabControl" ScrollViewer.CanContentScroll="True" >
             <TabItem Header="Menu" Height="27" Margin="0,0,0,0">
-                
             </TabItem>
         </TabControl>
     </Grid>

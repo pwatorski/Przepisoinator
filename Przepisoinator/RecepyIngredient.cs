@@ -16,6 +16,11 @@ namespace Przepisoinator
         public MeasurementUnit Unit;
         public double Value { get; set; }
 
+        public static RecepyIngredient GetEmptyIngredient()
+        {
+            return new RecepyIngredient(new Ingredient(""), MeasurementUnit.BasicUnit, 1);
+        }
+
         public RecepyIngredient(Ingredient ingredient, MeasurementUnit unit, float value)
         {
             Ingredient = ingredient;
@@ -23,8 +28,12 @@ namespace Przepisoinator
             Value = value;
         }
 
-        public bool ConvertInPlace(MeasurementUnit newUnit)
+        public bool ConvertInPlace(MeasurementUnit? newUnit)
         {
+            if(newUnit == null)
+            {
+                return false;
+            }
             var newAmount = Unit.GetAmountIn(Value, newUnit);
             if (newAmount < 0) return false;
             Value = newAmount;

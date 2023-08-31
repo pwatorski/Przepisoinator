@@ -31,7 +31,7 @@ namespace Przepisoinator
             base.OnMouseMove(e);
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                Parent.OpenNewWindow();
+                //Parent.OpenNewWindow();
             }
         }
     }

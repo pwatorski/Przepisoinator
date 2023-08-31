@@ -12,7 +12,7 @@ namespace Przepisoinator
     public class MeasurementUnit
     {
         public static MeasurementUnit BasicUnit { get; private set; }
-        public static Dictionary<long, MeasurementUnit> Measurements { get; private set; }
+        public static Dictionary<long, MeasurementUnit> AllUnits { get; private set; }
         public string Name { get; set; }
         [JsonIgnore]
         public string LowerName { get; set; }
@@ -24,8 +24,14 @@ namespace Przepisoinator
 
         static MeasurementUnit()
         {
-            Measurements = new Dictionary<long, MeasurementUnit>();
+            AllUnits = new Dictionary<long, MeasurementUnit>();
             BasicUnit = new MeasurementUnit("Jednostka", "Ø", 0);
+            var _ = new MeasurementUnit("Kilogram", "Kg", 1);
+            _ = new MeasurementUnit("Kilogram", "g", 2);
+            _ = new MeasurementUnit("Kilogram", "l", 3);
+            _ = new MeasurementUnit("Kilogram", "ml", 4);
+            _ = new MeasurementUnit("Sztuki", "szt.", 5);
+            _ = new MeasurementUnit("Ząbki", "ząbki", 6);
         }
 
         public MeasurementUnit(string name, string symbol, long id)
@@ -35,7 +41,7 @@ namespace Przepisoinator
             Symbol = symbol;
             LowerSymbol = symbol.ToLower();
             ID = id;
-            Measurements.Add(id, this);
+            AllUnits.Add(id, this);
             Conversions = new Dictionary<long, double>()
             {
                 {ID, 1}
@@ -65,7 +71,7 @@ namespace Przepisoinator
             var mostSImilar = BasicUnit;
             double similarity = 0;
             name = name.ToLower();
-            foreach(var u in Measurements.Values)
+            foreach(var u in AllUnits.Values)
             {
                 var curSim = u.GetSimilarity(name, includeSymbol);
                 if (curSim == 1)
@@ -97,7 +103,7 @@ namespace Przepisoinator
         {
             if (!Directory.Exists(dirPath))
                 Directory.CreateDirectory(dirPath);
-            Measurements.Values.ToList().ForEach(x=>x.SaveInDirectory(dirPath));
+            AllUnits.Values.ToList().ForEach(x=>x.SaveInDirectory(dirPath));
             
         }
 
@@ -118,7 +124,7 @@ namespace Przepisoinator
             {
                 _ = FromFile(path);
             }
-            return Measurements.Values.Count;
+            return AllUnits.Values.Count;
         }
     }
 }
