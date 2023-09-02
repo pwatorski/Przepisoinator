@@ -22,18 +22,18 @@ namespace Przepisoinator
     public partial class IngredientView : UserControl
     {
         RecepyView parentRecepy;
-        protected bool EmptyName;
         public bool EditMode;
         public bool Empty = true;
         public MeasurementUnit SUnit = MeasurementUnit.BasicUnit;
         public RecepyIngredient ingredient;
+        public int Indent { get; set; }
 
-        public string Text { get => $"{ingredient.ActiveName} {ingredient.Value} {ingredient.Unit.Symbol}"; }
+        public string Text { get => ingredient.Unit==MeasurementUnit.BasicUnit? ingredient.ActiveName: $"{ingredient.ActiveName} {ingredient.Value} {ingredient.Unit.Symbol}"; }
+        public static readonly int IndentWidth = 20;
 
         public IngredientView(RecepyView recepyView, RecepyIngredient? recepyIngredient=null)
         {
             InitializeComponent();
-            EmptyName = true;
             parentRecepy = recepyView;
             if(recepyIngredient != null)
             {
@@ -55,10 +55,12 @@ namespace Przepisoinator
             SUnit = ingredient.Unit;
             if (ingredient.ActiveName.Length > 0)
             {
-                EmptyName = false;
                 textBox_name.Text = ingredient.ActiveName;
-                UpdateTextMode(true);
-
+                textBox_nameOverlay.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                textBox_nameOverlay.Visibility = Visibility.Visible;
             }
             textBox_name.GotFocus += textBox_name_GotFocus;
             textBox_name.LostFocus += textBox_name_LostFocus;
@@ -72,55 +74,21 @@ namespace Przepisoinator
 
         private void TextBox_name_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (EmptyName)
-            {
-                EmptyName = false;
-                Empty = false;
-            }
-            else
-            {
-                if(textBox_name.Text.Length == 0)
-                {
-                    EmptyName = true;
-                    Empty = ingredient.Unit == MeasurementUnit.BasicUnit;
-                }
-            }
             ingredient.Ingredient.Name = textBox_name.Text;
-        }
-
-        protected void UpdateTextMode(bool normal)
-        {
-            if(normal)
-            {
-                textBox_name.FontWeight = FontWeights.Normal;
-                textBox_name.FontStyle = FontStyles.Normal;
-                textBox_name.Foreground = Brushes.Black;
-            }
-            else
-            {
-                textBox_name.FontWeight = FontWeights.Light;
-                textBox_name.FontStyle = FontStyles.Italic;
-                textBox_name.Foreground = Brushes.Gray;
-            }
+            Empty = textBox_name.Text.Length == 0;
         }
 
         private void textBox_name_LostFocus(object sender, RoutedEventArgs e)
         {
             if (textBox_name.Text.Length == 0)
             {
-                textBox_name.Text = "Dodaj składnik...";
-                UpdateTextMode(false);
-                EmptyName = true;
+                textBox_nameOverlay.Visibility = Visibility.Visible;
             }
         }
 
         private void textBox_name_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (EmptyName)
-            {
-                textBox_name.Text = string.Empty;
-                UpdateTextMode(true);
-            }
+            textBox_nameOverlay.Visibility = Visibility.Hidden;
         }
 
         internal void FocusCursor()
@@ -138,9 +106,9 @@ namespace Przepisoinator
             parentRecepy.RemoveIngredient(this);
         }
 
-        private void textBox_name_KeyUp(object sender, KeyEventArgs e)
+        private void textBox_name_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+           if (e.Key == Key.Enter)
             {
                 parentRecepy.AddNewIngredient(this);
                 e.Handled=true; 
@@ -168,7 +136,7 @@ namespace Przepisoinator
             ingredient.ConvertInPlace((MeasurementUnit)comboBox_unit.SelectedItem);
             ingredient.Unit = (MeasurementUnit)comboBox_unit.SelectedItem;
             textBox_amount.Text = $"{ingredient.Value}";
-            Empty = ingredient.Unit == MeasurementUnit.BasicUnit && EmptyName;
+            Empty = ingredient.Unit == MeasurementUnit.BasicUnit && textBox_name.Text.Length == 0;
         }
 
         internal void SetMode(bool editMode)
@@ -178,6 +146,7 @@ namespace Przepisoinator
             {
                 stackPanel_base.Visibility = Visibility.Visible;
                 Visibility = Visibility.Visible;
+                textBox_fullText.Text = "";
             }
             else
             {
@@ -193,6 +162,42 @@ namespace Przepisoinator
                 }
             }
             
+        }
+
+        private void grid_base_KeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine(e.Key.ToString());
+            if(e.Key == Key.Tab) 
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                {
+                    if (Indent > 0)
+                        Indent -= 1;
+                }
+                else
+                {
+                    Indent += 1;
+                }
+                if(Indent > 0)
+                {
+                    textBlock_bulletPoint.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    textBlock_bulletPoint.Visibility = Visibility.Collapsed;
+                }
+                rectangle_tabSpacer.Width = Indent * IndentWidth;
+                e.Handled = true;
+            }
+        }
+
+        private void textBox_nameOverlay_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if(EditMode)
+            {
+                textBox_nameOverlay.Visibility = Visibility.Hidden;
+                FocusCursor();
+            }
         }
     }
 }

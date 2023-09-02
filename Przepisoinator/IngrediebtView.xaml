@@ -6,19 +6,31 @@
              xmlns:local="clr-namespace:Przepisoinator"
              mc:Ignorable="d" 
              HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,1,0,1" Height="Auto"
-             Focusable="True">
-    <Grid Name="grid_base" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="True">
+             Focusable="True" d:Background="White">
+    <Grid Name="grid_base" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="True" KeyDown="grid_base_KeyDown">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Rectangle Name="rectangle_tabSpacer" HorizontalAlignment="Left" Width="0"/>
+        <TextBlock Name="textBlock_bulletPoint" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Visibility="Collapsed">-</TextBlock>
         <TextBox Name="textBox_fullText" Text="Dodaj składnik..." 
                      TextWrapping="Wrap" VerticalAlignment="Top" Height="18" 
-                     Margin="0,1,0,1" HorizontalAlignment="Left" MinWidth="100"
-                     KeyUp="textBox_name_KeyUp" Focusable="True"
-                     Foreground="Gray" BorderThickness="0,0,0,0"/>
-        <StackPanel Name="stackPanel_base" Orientation="Horizontal" Height="22" Focusable="True" Visibility="Visible">
-            <TextBox Name="textBox_name" Text="Dodaj składnik..." 
+                     Margin="0,1,0,1" HorizontalAlignment="Left" MinWidth="100" Focusable="True"
+                     BorderThickness="0,0,0,0" KeyDown="textBox_name_KeyDown" Grid.Column="1" Grid.ColumnSpan="2"/>
+        <StackPanel Name="stackPanel_base" Orientation="Horizontal" Height="22" Focusable="True" Visibility="Visible" Grid.Column="1" Grid.ColumnSpan="2">
+            <Grid>
+                <TextBox Name="textBox_name" Text=""
                      TextWrapping="Wrap" VerticalAlignment="Top" Height="20" 
                      Margin="0,1,0,0" HorizontalAlignment="Left" MinWidth="100"
-                     KeyUp="textBox_name_KeyUp" Focusable="True"
-                     Foreground="Gray" FontWeight="Light" FontStyle="Italic"/>
+                     KeyUp="textBox_name_KeyDown" Focusable="True"/>
+                
+                <TextBox Name="textBox_nameOverlay" Text="Dodaj składnik..." 
+                     TextWrapping="Wrap" VerticalAlignment="Top" Height="20" 
+                     Margin="0,1,0,0" HorizontalAlignment="Left" MinWidth="100"
+                     KeyUp="textBox_name_KeyDown" Focusable="False"
+                     Foreground="Gray" FontWeight="Light" FontStyle="Italic" MouseLeftButtonUp="textBox_nameOverlay_MouseLeftButtonUp"/>
+            </Grid>
             <TextBox Name="textBox_amount" Text="1" Height="20" Margin="2,1,0,0" MinWidth="30" TextAlignment="Right" HorizontalAlignment="Left" VerticalAlignment="Top" TextChanged="textBox_amount_TextChanged"/>
             <ComboBox Name="comboBox_unit" Height="22" MinWidth="50" HorizontalAlignment="Left" Margin="2,0,0,0" SelectionChanged="comboBox_unit_SelectionChanged">
                 <ComboBox.ItemTemplate>
