@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Przepisoinator"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="400">
+             d:DesignHeight="300" d:DesignWidth="400" d:Background="White">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -13,13 +13,16 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Grid Name="grid_titleBar" VerticalAlignment="Top" Margin="0,0,0,4">
+        <Grid Name="grid_titleBar" VerticalAlignment="Top" Margin="2,0,0,4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Name="textBox_name" TextWrapping="Wrap" Text="Podaj nazwę..." VerticalAlignment="Center" FontSize="16" Height="24" HorizontalContentAlignment="Stretch" Margin="0,0,2,0" FontStyle="Italic" Foreground="Gray"/>
+            <Grid Name="grid_name">
+                <TextBox Name="textBox_name" TextWrapping="Wrap" Text="" VerticalAlignment="Center" FontSize="16" Height="24" HorizontalContentAlignment="Stretch" FontWeight="Bold" Margin="0,0,2,0"/>
+                <TextBox Name="textBox_nameOverlay" TextWrapping="Wrap" Text="Podaj nazwę..." VerticalAlignment="Center" FontSize="16" Height="24" HorizontalContentAlignment="Stretch" Margin="0,0,2,0" FontStyle="Italic" Foreground="Gray" MouseLeftButtonDown="textBox_nameOverlay_MouseLeftButtonDown" Focusable="False"/>
+            </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.ColumnSpan="2" >
                 <Button Name="button_editSave" Content="Edytuj" Width="50" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.56,0.591" Margin="0,0,0,0" Click="button_editSave_Click"/>
                 <Button Name="button_cancel" Content="Anuluj" Width="50" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.56,0.591" Margin="2,0,0,0" Visibility="Collapsed" Click="button_cancel_Click"/>
@@ -31,15 +34,28 @@
                     <StackPanel Name="stackPanel_ingredients" VerticalAlignment="Top">
 
                     </StackPanel>
-                    <RichTextBox Name="rtb_description" Margin="0,4,0,0" VerticalAlignment="Top" Foreground="Gray" FontStyle="Italic" FontWeight="Light">
-                        <FlowDocument>
-                            <Paragraph>
-                                <Run Text="Przepis..."/>
-                            </Paragraph>
-                        </FlowDocument>
-                    </RichTextBox>
-                    <TextBlock FontSize="10">Tagi:</TextBlock>
+                    <Grid Name="grid_description" Margin="2,0,0,0">
+                        <RichTextBox Name="rtb_description" Margin="0,4,0,0" VerticalAlignment="Top">
+                            <FlowDocument>
+                                <Paragraph>
+                                    <Run Text=""/>
+                                </Paragraph>
+                            </FlowDocument>
+                        </RichTextBox>
+                        <TextBox Name="rtb_descriptionOverlay" Margin="0,4,0,0" VerticalAlignment="Top" Foreground="Gray" FontStyle="Italic" FontWeight="Light" Focusable="False" MouseLeftButtonDown="rtb_descriptionOverlay_MouseLeftButtonDown">Przepis...</TextBox>
+                    </Grid>
+                    <TextBlock FontSize="10" Margin="4,0,0,0">Tagi:</TextBlock>
                     <WrapPanel Name="wrapPanel_tags" Orientation="Horizontal">
+                        <Button Name="button_addTag" Width="18" Height="18" BorderBrush="#FFDDDDDD" Background="White" Click="button_addTag_Click">
+                            <TextBlock FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Margin="0,-6,0,0" Foreground="Gray">
+                                +
+                            </TextBlock>
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
                     </WrapPanel>
                 </StackPanel>
             </ScrollViewer>

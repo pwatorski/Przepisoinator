@@ -25,17 +25,23 @@ namespace Przepisoinator
         bool moveLeft = false;
         bool moveRight = false;
         bool remove = false;
-        public TagView()
+        bool EditMode;
+
+        public TagView(RecepyView? parent=null)
         {
+            if (parent == null)
+            {
+                parentRecepy = (RecepyView)Parent;
+            }
+            else
+            {
+                parentRecepy = parent;
+            }
             InitializeComponent();
-            parentRecepy = (RecepyView)Parent;
             textBox_name.Text = "#";
-        }
-        public TagView(RecepyView parent)
-        {
-            this.parentRecepy = parent;
-            InitializeComponent();
-            textBox_name.Text = "#";
+            remove = true;
+            EditMode = false;
+            SetMode(EditMode);
 
         }
 
@@ -51,6 +57,7 @@ namespace Przepisoinator
             {
                 parentRecepy.AddNewTag(this);
                 textBox_name.Text = textBox_name.Text.TrimEnd();
+                return;
             }
             parentRecepy.ChangeTag(this, textBox_name.Text);
         }
@@ -63,8 +70,31 @@ namespace Przepisoinator
             remove = false;
         }
 
-        private void textBox_name_KeyUp(object sender, KeyEventArgs e)
+        public void SetMode(bool editMode)
         {
+            if (editMode)
+            {
+                textBox_name.IsReadOnly = false;
+                
+                textBox_name.BorderBrush = new SolidColorBrush(Color.FromRgb(0xAB, 0xAD, 0xB3));
+                textBox_name.Background = new SolidColorBrush(Color.FromRgb(0xEE, 0xEE, 0xEE));
+                
+            }
+            else
+            {
+                textBox_name.IsReadOnly = true;
+                
+                textBox_name.BorderBrush = new SolidColorBrush(Color.FromRgb(0xDD, 0xDD, 0xDD));
+                textBox_name.Background = new SolidColorBrush(Colors.White);
+
+                button_close.Visibility = Visibility.Hidden;
+            }
+            EditMode = editMode;
+        }
+
+        private void textBox_name_KeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine(e.Key.ToString());    
             switch (e.Key)
             {
                 case Key.Enter:
@@ -80,7 +110,10 @@ namespace Przepisoinator
                             parentRecepy.MoveCursor(this, -1);
                         }
                         else
+                        {
                             moveLeft = true;
+                            e.Handled = true;
+                        }
                         return;
                     }
                     else
@@ -97,7 +130,10 @@ namespace Przepisoinator
                             moveRight = false;
                         }
                         else
+                        {
                             moveRight = true;
+                            e.Handled = true;
+                        }
                         return;
                     }
                     else
@@ -116,6 +152,7 @@ namespace Przepisoinator
                         else
                         {
                             remove = true;
+                            e.Handled = true;
                         }
                         return;
                     }
@@ -131,6 +168,7 @@ namespace Przepisoinator
                         else
                         {
                             remove = true;
+                            e.Handled = true;
                         }
                         return;
                     }
@@ -164,6 +202,27 @@ namespace Przepisoinator
                 textBox_name.SelectionStart = 1;
                 textBox_name.SelectionLength = Math.Max(0, textBox_name.SelectionLength - 1);
             }
+        }
+
+        private void button_close_Click(object sender, RoutedEventArgs e)
+        {
+            if (EditMode)
+            {
+                parentRecepy.TryRemoveTag(this, -1);
+            }
+        }
+
+        private void thisControl_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (EditMode)
+            {
+                button_close.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void thisControl_MouseLeave(object sender, MouseEventArgs e)
+        {
+            button_close.Visibility = Visibility.Hidden;
         }
     }
 }
