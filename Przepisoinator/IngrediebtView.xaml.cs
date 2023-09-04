@@ -74,7 +74,7 @@ namespace Przepisoinator
 
         private void TextBox_name_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ingredient.Ingredient.Name = textBox_name.Text;
+            ingredient.Name = textBox_name.Text;
             Empty = textBox_name.Text.Length == 0;
         }
 

@@ -17,16 +17,26 @@ namespace Przepisoinator
         public static Recepy BasicRecepy = new()
         {
             Name = "Przepis",
-            Description = "Opis przepisu.",
             ID = -1,
-            Ingredients = new List<RecepyIngredient>() { new RecepyIngredient(Ingredient.BasicIngredient, MeasurementUnit.BasicUnit, 1)},
+            Ingredients = new List<RecepyIngredient>() { new RecepyIngredient("", MeasurementUnit.BasicUnit, 1)},
 
         };
         public string Name { get; set; } = "";
-        public string Description { get; set; } = "";
 
         [JsonIgnore]
         public FlowDocument DescriptionFlow { get; set; }
+
+        public JsonFlowDocument FlowJsonDocument 
+        {
+            get
+            {
+                return JsonFlowDocument.FromDocument(DescriptionFlow);
+            }
+            set 
+            {
+                DescriptionFlow = value.ToFlowDocument();
+            } 
+        }
         public long ID { get; protected set; } = 0;
         public List<RecepyIngredient> Ingredients { get; set; }
         public int ServingCount { get; set; }
@@ -43,8 +53,7 @@ namespace Przepisoinator
 
         public string ToJson()
         {
-            FileStream xamlFile = new FileStream("x", FileMode.Create, FileAccess.ReadWrite);
-            System.Xml.XmlReader.Create(DescriptionFlow.ToString());
+
             return JsonSerializer.Serialize(this, Misc.JsonOptions);
         }
 

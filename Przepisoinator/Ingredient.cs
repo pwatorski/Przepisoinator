@@ -12,7 +12,8 @@ namespace Przepisoinator
     {
         public static Ingredient BasicIngredient { get; private set; }
         public static Dictionary<long, Ingredient> Ingredients { get; private set; }
-        public string Name { get; set; } = "???";
+        public long ID { get; private set; }
+        public string Name { get; set; }
         [JsonIgnore]
         public string LowerName { get; set; }
 
@@ -22,10 +23,19 @@ namespace Przepisoinator
             BasicIngredient = new Ingredient("Nic");
         }
 
-        public Ingredient(string name)
+        public Ingredient(string name, long? id=null)
         {
             Name = name;
             LowerName = name.ToLower();
+            if (id != null )
+            {
+                ID = (long)id;
+            }
+            else
+            {
+                ID = Ingredients.Count;
+            }
+            Ingredients.Add(ID, this);
         }
 
         public double GetSimilarity(string lowName)

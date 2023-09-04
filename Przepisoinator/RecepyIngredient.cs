@@ -3,27 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Przepisoinator
 {
     public class RecepyIngredient
     {
-        public long IngredientId { get; set; }
-        public long UnitId { get; set; }
-        public string ActiveName { get => Ingredient.NumberName(Value); }
-        public Ingredient Ingredient;
+        
+        public long UnitId { get=>Unit.ID; set=>Unit=MeasurementUnit.AllUnits[value]; }
+        [JsonIgnore]
+        public string ActiveName { get => Name; }
+        public string Name { get; set; }
+        [JsonIgnore]
         public MeasurementUnit Unit;
         public double Value { get; set; }
 
-        public static RecepyIngredient GetEmptyIngredient()
+        [JsonConstructor]
+        public RecepyIngredient(string name, long unitId, double value)
         {
-            return new RecepyIngredient(new Ingredient(""), MeasurementUnit.BasicUnit, 1);
+            Name = name;
+            Unit = MeasurementUnit.AllUnits[unitId];
+            Value = value;
         }
 
-        public RecepyIngredient(Ingredient ingredient, MeasurementUnit unit, float value)
+        public static RecepyIngredient GetEmptyIngredient()
         {
-            Ingredient = ingredient;
+            return new RecepyIngredient("", MeasurementUnit.BasicUnit, 1);
+        }
+
+        public RecepyIngredient(string name, MeasurementUnit unit, float value)
+        {
+            Name = name;
             Unit = unit;
             Value = value;
         }
@@ -47,7 +58,8 @@ namespace Przepisoinator
 
         public static RecepyIngredient FromJson(string json)
         {
-            return JsonSerializer.Deserialize<RecepyIngredient>(json) ?? new RecepyIngredient(Ingredient.BasicIngredient, MeasurementUnit.BasicUnit, 1);
+            return JsonSerializer.Deserialize<RecepyIngredient>(json) ?? new RecepyIngredient("", MeasurementUnit.BasicUnit, 1);
         }
+
     }
 }

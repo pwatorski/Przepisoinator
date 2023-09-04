@@ -47,6 +47,8 @@ namespace Przepisoinator
 
         private void textBox_name_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (!EditMode)
+                return;
             if (textBox_name.Text.Length == 0 || textBox_name.Text[0] != '#')
             {
                 textBox_name.Text = $"#{textBox_name.Text}";
@@ -64,7 +66,9 @@ namespace Przepisoinator
 
         private void textBox_name_LostFocus(object sender, RoutedEventArgs e)
         {
-            textBox_name.Text = $"#{textBox_name.Text.Substring(1).Trim()}";
+            if (!EditMode)
+                return;
+            textBox_name.Text = $"#{textBox_name.Text[1..].Trim()}";
             moveRight = false;
             moveLeft = false;
             remove = false;
@@ -78,7 +82,7 @@ namespace Przepisoinator
                 
                 textBox_name.BorderBrush = new SolidColorBrush(Color.FromRgb(0xAB, 0xAD, 0xB3));
                 textBox_name.Background = new SolidColorBrush(Color.FromRgb(0xEE, 0xEE, 0xEE));
-                
+                textBox_name.Select(1, 0);
             }
             else
             {
@@ -94,7 +98,8 @@ namespace Przepisoinator
 
         private void textBox_name_KeyDown(object sender, KeyEventArgs e)
         {
-            Console.WriteLine(e.Key.ToString());    
+            if (!EditMode)
+                return;
             switch (e.Key)
             {
                 case Key.Enter:
@@ -186,7 +191,7 @@ namespace Przepisoinator
                 Keyboard.Focus(textBox_name);
                 if (side < 0) 
                 {
-                    textBox_name.Select(0,0);
+                    textBox_name.Select(1,0);
                 }
                 else if (side > 0)
                 {
@@ -197,7 +202,9 @@ namespace Przepisoinator
 
         private void textBox_name_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            if(textBox_name.SelectionStart == 0)
+            if (!EditMode)
+                return;
+            if (textBox_name.SelectionStart == 0)
             {
                 textBox_name.SelectionStart = 1;
                 textBox_name.SelectionLength = Math.Max(0, textBox_name.SelectionLength - 1);
@@ -222,6 +229,8 @@ namespace Przepisoinator
 
         private void thisControl_MouseLeave(object sender, MouseEventArgs e)
         {
+            if (!EditMode)
+                return;
             button_close.Visibility = Visibility.Hidden;
         }
     }

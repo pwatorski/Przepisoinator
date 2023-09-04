@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,7 +25,6 @@ namespace Przepisoinator
     {
         public bool EditMode { get; protected set; }
         protected bool Empty;
-        protected bool EmptyName;
         public bool Windowed { get; protected set; }
         public Recepy Recepy;
         public RecepyView(Recepy? recepy =null)
@@ -34,7 +34,12 @@ namespace Przepisoinator
             if (recepy == null)
                 recepy = Recepy.GetEmptyRecepy();
             Recepy = recepy;
-            EmptyName = true;
+
+            if(Recepy.Name.Length > 0)
+            {
+                textBox_name.Text = Recepy.Name;
+            }
+
             foreach (var i in Recepy.Ingredients)
             {
                 stackPanel_ingredients.Children.Add(new IngredientView(this, i));
@@ -50,10 +55,10 @@ namespace Przepisoinator
 
 
 
-            if (Recepy.Description.Length > 0)
+            if (Recepy.DescriptionFlow != null)
             {
                 Empty = false;
-                //rtb_description.Document. = Recepy.Name;
+                rtb_description.Document = Recepy.DescriptionFlow;
                 UpdateTextMode(textBox_name, true);
 
             }
@@ -219,8 +224,23 @@ namespace Przepisoinator
 
         private void button_editSave_Click(object sender, RoutedEventArgs e)
         {
-
+            if(EditMode)
+            {
+                Save();
+            }
             SetMode(!EditMode);
+        }
+
+        private void Save()
+        {
+            Recepy.Ingredients = stackPanel_ingredients.Children.OfType<IngredientView>().Select(x => x.ingredient).ToList();
+            Recepy.Tags = wrapPanel_tags.Children.OfType<TagView>().Select(x => x.textBox_name.Text).ToList();
+            Recepy.DescriptionFlow = rtb_description.Document;
+            using (var sw = new StreamWriter($"test_rtb.json"))
+            {
+                sw.Write(Recepy.ToJson());
+            }
+            ;
         }
 
         private void button_cancel_Click(object sender, RoutedEventArgs e)

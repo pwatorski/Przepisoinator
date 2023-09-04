@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,11 +25,9 @@ namespace Przepisoinator
         {
             InitializeComponent();
 
+            using(var sr = new StreamReader("test_rtb.json"))
 
-            mainTabControl.Items.Add(new RecepyTabItem(new RecepyView())
-            {
-                Title = "Sól z solą",
-            });
+            mainTabControl.Items.Add(new RecepyTabItem(new RecepyView(Recepy.FromJson(sr.ReadToEnd()))));
 
             //BaseGrid.Children.Add(new parentRecepy());
 

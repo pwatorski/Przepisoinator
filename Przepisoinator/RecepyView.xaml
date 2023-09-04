@@ -38,7 +38,10 @@
                         <RichTextBox Name="rtb_description" Margin="0,4,0,0" VerticalAlignment="Top">
                             <FlowDocument>
                                 <Paragraph>
-                                    <Run Text=""/>
+                                    <Run Text="asdasdasd"/>
+                                </Paragraph>
+                                <Paragraph>
+                                    <Run Text="asdasdasd" FontWeight="Bold" FontStyle="Italic"/>
                                 </Paragraph>
                             </FlowDocument>
                         </RichTextBox>
