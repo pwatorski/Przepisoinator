@@ -50,7 +50,8 @@ namespace Przepisoinator
             {
                 return new JsonFlowDocument(new List<JsonFlowParagraph>());
             }
-            return new JsonFlowDocument(flowDocument.Blocks.Select(x=>JsonFlowParagraph.FromParagraph((Paragraph)x)).ToList());
+
+            return new JsonFlowDocument(flowDocument.Blocks.OfType<Paragraph>().Select(JsonFlowParagraph.FromParagraph).ToList());
         }
         public static JsonFlowDocument FromJson(string json)
         {
@@ -97,9 +98,16 @@ namespace Przepisoinator
             Paragraph paragraph = new Paragraph();
             foreach (var i in Inlines)
             {
-                paragraph.Inlines.Add(i.Text);
-                paragraph.Inlines.LastInline.FontStyle = i.FontStyle;
-                paragraph.Inlines.LastInline.FontWeight = i.FontWeight;
+                if (i.IsBreakline)
+                {
+                    paragraph.Inlines.Add(new LineBreak());
+                }
+                else
+                {
+                    paragraph.Inlines.Add(i.Text);
+                    paragraph.Inlines.LastInline.FontStyle = i.FontStyle;
+                    paragraph.Inlines.LastInline.FontWeight = i.FontWeight;
+                }
             }
             return paragraph;
         }
@@ -112,26 +120,33 @@ namespace Przepisoinator
         public bool IsItallic { get; set; }
         [JsonPropertyName("weight")]
         public int FontWeightID { get; set; }
+        public bool IsBreakline { get; set; }
 
         [JsonIgnore]
         public FontStyle FontStyle { get => IsItallic ? FontStyles.Italic : FontStyles.Normal; }
         [JsonIgnore]
         public FontWeight FontWeight { get => FontWeight.FromOpenTypeWeight(FontWeightID); }
 
-        public JsonFlowInline(string text, bool isItallic, int fontWeightID)
+        public JsonFlowInline(string text="", bool isItallic=false, int fontWeightID=400, bool isBreakline=false)
         {
             Text = text;
             IsItallic = isItallic;
             FontWeightID = fontWeightID;
+            IsBreakline = isBreakline;
         }
 
 
         public static JsonFlowInline FromInline(Inline inline)
         {
+            if(inline.GetType() == typeof(LineBreak))
+            {
+                return new JsonFlowInline(isBreakline:true);
+            }
             return new JsonFlowInline(
-                inline.ContentStart.GetTextInRun(LogicalDirection.Forward), 
+                inline.ContentStart.GetTextInRun(LogicalDirection.Forward),
                 inline.FontStyle == FontStyles.Italic,
-                inline.FontWeight.ToOpenTypeWeight());
+                inline.FontWeight.ToOpenTypeWeight(),
+                false);
         }
     }
 }
