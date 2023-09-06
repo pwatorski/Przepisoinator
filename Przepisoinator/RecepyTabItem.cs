@@ -29,7 +29,7 @@ namespace Przepisoinator
             closableTabHeader = new RecepyHeader(this);
             // Assign the usercontrol to the tab header
             this.Header = closableTabHeader;
-
+            Title = recepyView.Recepy.Name;
             // Attach to the CloseableHeader events
             // (Mouse Enter/Leave, Button Click, and Label resize)
             closableTabHeader.button_close.MouseEnter +=
