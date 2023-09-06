@@ -23,10 +23,25 @@ namespace Przepisoinator
     {
         RecepyView parentRecepy;
         public bool EditMode;
-        public bool Empty = true;
+        public bool Empty { get => ingredient.Unit == MeasurementUnit.BasicUnit && textBox_name.Text.Length == 0; }
         public MeasurementUnit SUnit = MeasurementUnit.BasicUnit;
         public RecepyIngredient ingredient;
-        public int Indent { get; set; }
+        public int Indent { get=>indent; set 
+            {
+                indent = value;
+                if (indent > 0)
+                {
+                    textBlock_bulletPoint.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    textBlock_bulletPoint.Visibility = Visibility.Collapsed;
+                }
+                ingredient.SetIndet(indent);
+                rectangle_tabSpacer.Width = indent * IndentWidth;
+            } 
+        }
+        protected int indent;
 
         public string Text { get => ingredient.Unit==MeasurementUnit.BasicUnit? ingredient.ActiveName: $"{ingredient.ActiveName} {ingredient.Value} {ingredient.Unit.Symbol}"; }
         public static readonly int IndentWidth = 20;
@@ -37,12 +52,10 @@ namespace Przepisoinator
             parentRecepy = recepyView;
             if(recepyIngredient != null)
             {
-                Empty = false;
                 ingredient = recepyIngredient;
             }
             else
             {
-                Empty = true;
                 ingredient = RecepyIngredient.GetEmptyIngredient(); 
             }
             
@@ -62,6 +75,7 @@ namespace Przepisoinator
             {
                 textBox_nameOverlay.Visibility = Visibility.Visible;
             }
+            Indent = ingredient.Indent;
             textBox_name.GotFocus += textBox_name_GotFocus;
             textBox_name.LostFocus += textBox_name_LostFocus;
             textBox_name.TextChanged += TextBox_name_TextChanged;
@@ -75,7 +89,6 @@ namespace Przepisoinator
         private void TextBox_name_TextChanged(object sender, TextChangedEventArgs e)
         {
             ingredient.Name = textBox_name.Text;
-            Empty = textBox_name.Text.Length == 0;
         }
 
         private void textBox_name_LostFocus(object sender, RoutedEventArgs e)
@@ -108,11 +121,19 @@ namespace Przepisoinator
 
         private void textBox_name_KeyDown(object sender, KeyEventArgs e)
         {
-           if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 parentRecepy.AddNewIngredient(this);
                 e.Handled=true; 
                 return;
+            }
+            if(e.Key == Key.V) 
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    parentRecepy.TryInsertClipboardIngredients(this);
+                    e.Handled = true;
+                }
             }
         }
 
@@ -136,7 +157,6 @@ namespace Przepisoinator
             ingredient.ConvertInPlace((MeasurementUnit)comboBox_unit.SelectedItem);
             ingredient.Unit = (MeasurementUnit)comboBox_unit.SelectedItem;
             textBox_amount.Text = $"{ingredient.Value}";
-            Empty = ingredient.Unit == MeasurementUnit.BasicUnit && textBox_name.Text.Length == 0;
         }
 
         internal void SetMode(bool editMode)
@@ -166,7 +186,6 @@ namespace Przepisoinator
 
         private void grid_base_KeyDown(object sender, KeyEventArgs e)
         {
-            Console.WriteLine(e.Key.ToString());
             if(e.Key == Key.Tab) 
             {
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
@@ -178,15 +197,6 @@ namespace Przepisoinator
                 {
                     Indent += 1;
                 }
-                if(Indent > 0)
-                {
-                    textBlock_bulletPoint.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    textBlock_bulletPoint.Visibility = Visibility.Collapsed;
-                }
-                rectangle_tabSpacer.Width = Indent * IndentWidth;
                 e.Handled = true;
             }
         }
@@ -198,6 +208,11 @@ namespace Przepisoinator
                 textBox_nameOverlay.Visibility = Visibility.Hidden;
                 FocusCursor();
             }
+        }
+
+        public RecepyIngredient GetIngredient()
+        {
+            return ingredient;
         }
     }
 }

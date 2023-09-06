@@ -18,13 +18,15 @@ namespace Przepisoinator
         [JsonIgnore]
         public MeasurementUnit Unit;
         public double Value { get; set; }
+        public int Indent { get; set; }
 
         [JsonConstructor]
-        public RecepyIngredient(string name, long unitId, double value)
+        public RecepyIngredient(string name, long unitId, double value, int indent=0)
         {
             Name = name;
             Unit = MeasurementUnit.AllUnits[unitId];
             Value = value;
+            Indent = indent;
         }
 
         public static RecepyIngredient GetEmptyIngredient()
@@ -32,11 +34,12 @@ namespace Przepisoinator
             return new RecepyIngredient("", MeasurementUnit.BasicUnit, 1);
         }
 
-        public RecepyIngredient(string name, MeasurementUnit unit, float value)
+        public RecepyIngredient(string name, MeasurementUnit unit, double value, int indent = 0)
         {
             Name = name;
             Unit = unit;
             Value = value;
+            Indent = indent;
         }
 
         public bool ConvertInPlace(MeasurementUnit? newUnit)
@@ -61,5 +64,9 @@ namespace Przepisoinator
             return JsonSerializer.Deserialize<RecepyIngredient>(json) ?? new RecepyIngredient("", MeasurementUnit.BasicUnit, 1);
         }
 
+        internal void SetIndet(int indent)
+        {
+            Indent = indent;
+        }
     }
 }
