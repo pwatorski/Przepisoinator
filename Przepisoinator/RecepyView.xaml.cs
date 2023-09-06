@@ -44,6 +44,11 @@ namespace Przepisoinator
             {
                 stackPanel_ingredients.Children.Add(new IngredientView(this, i));
             }
+
+            foreach (var t in Recepy.Tags)
+            {
+                wrapPanel_tags.Children.Insert(wrapPanel_tags.Children.Count - 1, new TagView(this, t));
+            }
             stackPanel_ingredients.Children.Add(new IngredientView(this));
             //wrapPanel_tags.Children.Add(new TagView(this));
 
@@ -233,9 +238,23 @@ namespace Przepisoinator
 
         private void Save()
         {
-            Recepy.Ingredients = stackPanel_ingredients.Children.OfType<IngredientView>().Select(x => x.ingredient).ToList();
+            Recepy.Ingredients = stackPanel_ingredients.Children.OfType<IngredientView>().Where(x=>!x.Empty).Select(x => x.GetIngredient()).ToList();
             Recepy.Tags = wrapPanel_tags.Children.OfType<TagView>().Select(x => x.textBox_name.Text).ToList();
             Recepy.DescriptionFlow = rtb_description.Document;
+
+            foreach (var b in rtb_description.Document.Blocks) 
+            {
+                Console.WriteLine(b.GetType());
+                if(b.GetType() == typeof(Paragraph)) 
+                {
+                    Paragraph p = (Paragraph)b;
+                    foreach(var i in p.Inlines)
+                    {
+                        Console.WriteLine(" " + i.GetType().ToString());
+                    }
+                }
+            }
+
             using (var sw = new StreamWriter($"test_rtb.json"))
             {
                 sw.Write(Recepy.ToJson());
@@ -264,6 +283,7 @@ namespace Przepisoinator
                 rtb_description.BorderThickness = new Thickness(1);
 
                 button_addTag.Visibility = Visibility.Visible;
+                textBlock_tags.Visibility = Visibility.Visible;
             }
             else
             {
@@ -276,6 +296,7 @@ namespace Przepisoinator
                 rtb_description.IsReadOnly = true;
                 rtb_description.BorderThickness = new Thickness(0);
                 button_addTag.Visibility = Visibility.Hidden;
+                textBlock_tags.Visibility = Visibility.Collapsed;
             }
             UpdateNameBox();
             foreach (var i in stackPanel_ingredients.Children.OfType<IngredientView>())
@@ -317,6 +338,63 @@ namespace Przepisoinator
         private void button_addTag_Click(object sender, RoutedEventArgs e)
         {
             AddNewTag(button_addTag);
+        }
+
+        internal void TryInsertClipboardIngredients(IngredientView callerIngredient)
+        {
+            var index = stackPanel_ingredients.Children.IndexOf(callerIngredient);
+
+            if(Clipboard.ContainsText())
+            {
+                var text = Clipboard.GetText();
+                var lines = text.Replace("\r", "").Split("\n").Where(x=>x.Length > 1);
+                bool success = false;
+                foreach(var l in lines)
+                {
+                    var words = l.Split(' ');
+                    if(words.Length > 1)
+                    {
+                        double value = 1;
+                        bool foundValue = false;
+                        MeasurementUnit unit = MeasurementUnit.BasicUnit;
+                        int wordCount = words.Length;
+                        int wordNum;
+                        var last = words.Last();
+
+                        for(wordNum = wordCount - 1; wordNum >= 0 && !foundValue; wordNum--)
+                        {
+                            Console.WriteLine(words[wordNum]);
+                            if (double.TryParse(words[wordNum], out value))
+                            {
+                                foundValue = true;
+                                success = true;
+                                break;
+                            }
+                        }
+                        if(!foundValue)
+                        {
+                            wordNum = words.Length-1;
+                        }
+
+                        Console.WriteLine($"wordNum: {wordNum}");
+
+                        var name = string.Join(" ", words[0..wordNum]);
+                        Console.WriteLine($"name: {name}");
+
+                        var unitName = string.Join(" ", words[(wordNum+1)..]);
+                        Console.WriteLine($"unitName: {unitName}");
+                        unit = MeasurementUnit.FindMostSimilar(unitName);
+                        index += 1;
+                        stackPanel_ingredients.Children.Insert(index,
+                            new IngredientView(this, new RecepyIngredient(name, unit, value)));
+                    }
+                }
+                if (success)
+                {
+                    stackPanel_ingredients.Children.Remove(callerIngredient);
+                }
+            }
+
         }
     }
 }

@@ -31,7 +31,7 @@
         <Grid Grid.Row="1" Grid.RowSpan="2">
             <ScrollViewer>
                 <StackPanel Name="stackPanel_body" Margin="0,0,0,4">
-                    <StackPanel Name="stackPanel_ingredients" VerticalAlignment="Top">
+                    <StackPanel Name="stackPanel_ingredients" VerticalAlignment="Top" Margin="6,0,0,0">
 
                     </StackPanel>
                     <Grid Name="grid_description" Margin="2,0,0,0">
@@ -42,13 +42,15 @@
                                 </Paragraph>
                                 <Paragraph>
                                     <Run Text="asdasdasd" FontWeight="Bold" FontStyle="Italic"/>
+                                    <LineBreak/>
+                                    <Run Text="asdasdasd" FontWeight="Bold" FontStyle="Italic"/>
                                 </Paragraph>
                             </FlowDocument>
                         </RichTextBox>
                         <TextBox Name="rtb_descriptionOverlay" Margin="0,4,0,0" VerticalAlignment="Top" Foreground="Gray" FontStyle="Italic" FontWeight="Light" Focusable="False" MouseLeftButtonDown="rtb_descriptionOverlay_MouseLeftButtonDown">Przepis...</TextBox>
                     </Grid>
-                    <TextBlock FontSize="10" Margin="4,0,0,0">Tagi:</TextBlock>
-                    <WrapPanel Name="wrapPanel_tags" Orientation="Horizontal">
+                    <TextBlock Name="textBlock_tags" FontSize="10" Margin="4,4,0,0">Tagi:</TextBlock>
+                    <WrapPanel Name="wrapPanel_tags" Orientation="Horizontal" Margin="2,2,0,0">
                         <Button Name="button_addTag" Width="18" Height="18" BorderBrush="#FFDDDDDD" Background="White" Click="button_addTag_Click">
                             <TextBlock FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Margin="0,-6,0,0" Foreground="Gray">
                                 +
