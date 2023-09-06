@@ -64,13 +64,13 @@ namespace Przepisoinator
 
         internal void RemoveTag(int index)
         {
-            if(index > 0 && index < Ingredients.Count)
+            if(index > 0 && index < Tags.Count)
                 Tags.RemoveAt(index);
         }
 
         internal void EditTag(int index, string text)
         {
-            if (index > 0 && index < Ingredients.Count)
+            if (index > 0 && index < Tags.Count)
                 Tags[index] = text.Trim();
         }
 
