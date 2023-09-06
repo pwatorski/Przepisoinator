@@ -26,12 +26,15 @@ namespace Przepisoinator
         {
             AllUnits = new Dictionary<long, MeasurementUnit>();
             BasicUnit = new MeasurementUnit("Jednostka", "Ø", 0);
-            var _ = new MeasurementUnit("Kilogram", "Kg", 1);
-            _ = new MeasurementUnit("Kilogram", "g", 2);
-            _ = new MeasurementUnit("Kilogram", "l", 3);
-            _ = new MeasurementUnit("Kilogram", "ml", 4);
+            var _ = new MeasurementUnit("Kilogram", "kg", 1);
+            _ = new MeasurementUnit("Gram", "g", 2);
+            _.AddConversion(1, 0.001);
+            _ = new MeasurementUnit("Litr", "l", 3);
+            _ = new MeasurementUnit("Mililitr", "ml", 4);
             _ = new MeasurementUnit("Sztuki", "szt.", 5);
             _ = new MeasurementUnit("Ząbki", "ząbki", 6);
+
+
         }
 
         public MeasurementUnit(string name, string symbol, long id)
@@ -46,6 +49,15 @@ namespace Przepisoinator
             {
                 {ID, 1}
             };
+        }
+
+        public void AddConversion(long unitId, double conversion, bool ignoreTarget=false)
+        {
+            Conversions.Add(unitId, conversion);
+            if (!ignoreTarget)
+            {
+                AllUnits[unitId].AddConversion(ID, 1.0 / conversion, ignoreTarget = true);
+            }
         }
 
         public double GetAmountIn(double amount, MeasurementUnit otherUnit)
