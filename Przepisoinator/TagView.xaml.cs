@@ -27,7 +27,7 @@ namespace Przepisoinator
         bool remove = false;
         bool EditMode;
 
-        public TagView(RecepyView? parent=null)
+        public TagView(RecepyView? parent=null, string text="#")
         {
             if (parent == null)
             {
@@ -38,11 +38,11 @@ namespace Przepisoinator
                 parentRecepy = parent;
             }
             InitializeComponent();
-            textBox_name.Text = "#";
+            textBox_name.Text = text;
             remove = true;
             EditMode = false;
             SetMode(EditMode);
-
+            textBox_name.AddHandler(KeyDownEvent, new KeyEventHandler(textBox_name_KeyDown), true);
         }
 
         private void textBox_name_TextChanged(object sender, TextChangedEventArgs e)
@@ -98,6 +98,7 @@ namespace Przepisoinator
 
         private void textBox_name_KeyDown(object sender, KeyEventArgs e)
         {
+            Console.WriteLine("T: " + e.Key.ToString());
             if (!EditMode)
                 return;
             switch (e.Key)
@@ -178,8 +179,6 @@ namespace Przepisoinator
                         return;
                     }
                     break;
-
-
             }
         }
 
@@ -232,6 +231,11 @@ namespace Przepisoinator
             if (!EditMode)
                 return;
             button_close.Visibility = Visibility.Hidden;
+        }
+
+        private void Grid_KeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine("G: " + e.Key.ToString());
         }
     }
 }

@@ -15,7 +15,7 @@
                  TextChanged="textBox_name_TextChanged" 
                  LostFocus="textBox_name_LostFocus" 
                  SelectionChanged="textBox_name_SelectionChanged"
-                 KeyDown="textBox_name_KeyDown" Height="18">
+                 Height="18">
             #
             <TextBox.Resources>
                 <Style TargetType="Border">
