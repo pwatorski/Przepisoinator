@@ -354,39 +354,10 @@ namespace Przepisoinator
                     var words = l.Split(' ');
                     if(words.Length > 1)
                     {
-                        double value = 1;
-                        bool foundValue = false;
-                        MeasurementUnit unit = MeasurementUnit.BasicUnit;
-                        int wordCount = words.Length;
-                        int wordNum;
-                        var last = words.Last();
-
-                        for(wordNum = wordCount - 1; wordNum >= 0 && !foundValue; wordNum--)
-                        {
-                            Console.WriteLine(words[wordNum]);
-                            if (double.TryParse(words[wordNum], out value))
-                            {
-                                foundValue = true;
-                                success = true;
-                                break;
-                            }
-                        }
-                        if(!foundValue)
-                        {
-                            wordNum = words.Length-1;
-                        }
-
-                        Console.WriteLine($"wordNum: {wordNum}");
-
-                        var name = string.Join(" ", words[0..wordNum]);
-                        Console.WriteLine($"name: {name}");
-
-                        var unitName = string.Join(" ", words[(wordNum+1)..]);
-                        Console.WriteLine($"unitName: {unitName}");
-                        unit = MeasurementUnit.FindMostSimilar(unitName);
                         index += 1;
-                        stackPanel_ingredients.Children.Insert(index,
-                            new IngredientView(this, new RecepyIngredient(name, unit, value)));
+                        foreach(var ri in RecepyIngredient.TryParseFromText(l))
+                            stackPanel_ingredients.Children.Insert(index,
+                                new IngredientView(this,ri));
                     }
                 }
                 if (success)

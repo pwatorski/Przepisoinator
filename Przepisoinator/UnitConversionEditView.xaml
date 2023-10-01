@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Przepisoinator.UnitConversionEditView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Przepisoinator"
+             mc:Ignorable="d">
+    <Grid VerticalAlignment="Top" MinWidth="200" Background="#FFEEEEEE">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Name="textBlock_equal" Margin="2,1,2,1" Height="19">=</TextBlock>
+            <TextBox Name="textBox_Value" MinWidth="20" TextAlignment="Right" TextChanged="textBox_Value_TextChanged">1</TextBox>
+            <ComboBox Name="comboBox_unit" Height="22" MinWidth="50" HorizontalAlignment="Left" Margin="2,0,0,0" SelectionChanged="comboBox_unit_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ShortName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+        <Button 
+                Name="button_remove" 
+                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                Height="19" Width="19" Margin="2,0,0,0" 
+                VerticalContentAlignment="Center" Click="button_remove_Click">
+            <TextBlock Height="17" VerticalAlignment="Center">X</TextBlock>
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+    </Grid>
+</UserControl>

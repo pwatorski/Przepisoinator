@@ -35,7 +35,7 @@
             <ComboBox Name="comboBox_unit" Height="22" MinWidth="50" HorizontalAlignment="Left" Margin="2,0,0,0" SelectionChanged="comboBox_unit_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Symbol}" />
+                        <TextBlock Text="{Binding ShortName}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>

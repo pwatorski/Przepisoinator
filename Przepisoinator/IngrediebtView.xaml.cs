@@ -43,7 +43,7 @@ namespace Przepisoinator
         }
         protected int indent;
 
-        public string Text { get => ingredient.Unit==MeasurementUnit.BasicUnit? ingredient.ActiveName: $"{ingredient.ActiveName} {ingredient.Value} {ingredient.Unit.Symbol}"; }
+        public string Text { get => ingredient.Unit==MeasurementUnit.BasicUnit? ingredient.ActiveName: $"{ingredient.ActiveName} {ingredient.Value} {ingredient.Unit.ShortName}"; }
         public static readonly int IndentWidth = 20;
 
         public IngredientView(RecepyView recepyView, RecepyIngredient? recepyIngredient=null)

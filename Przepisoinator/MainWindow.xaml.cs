@@ -41,5 +41,11 @@ namespace Przepisoinator
             var tab = (TabItem)closeImage.Parent;
             mainTabControl.Items.RemoveAt(tab.TabIndex);
         }
+
+        private void button_units_Click(object sender, RoutedEventArgs e)
+        {
+            var win2 = new UnitEditWindow();
+            win2.Show();
+        }
     }
 }

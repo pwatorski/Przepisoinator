@@ -43,10 +43,10 @@ namespace Przepisoinator
             return StringSimilarity.Get(LowerName, lowName);
         }
 
-        public static Ingredient FindMostSimilar(string name)
+        public static Ingredient FindMostSimilar(string name, out double similarity)
         {
             var mostSImilar = BasicIngredient;
-            double similarity = 0;
+            similarity = 0;
             name = name.ToLower();
             foreach (var u in Ingredients.Values)
             {
@@ -63,6 +63,11 @@ namespace Przepisoinator
             }
 
             return mostSImilar;
+        }
+
+        public static Ingredient FindMostSimilar(string name)
+        {
+            return FindMostSimilar(name, out _);
         }
 
         internal string NumberName(double value)

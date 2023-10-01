@@ -39,7 +39,7 @@ namespace Przepisoinator
             }
             InitializeComponent();
             textBox_name.Text = text;
-            remove = true;
+            remove = text.Length == 1;
             EditMode = false;
             SetMode(EditMode);
             textBox_name.AddHandler(KeyDownEvent, new KeyEventHandler(textBox_name_KeyDown), true);

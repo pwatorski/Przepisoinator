@@ -12,7 +12,7 @@ namespace Przepisoinator
         public static double Get(string a, string b)
         {
             var dist = LevenshteinDistance.Compute(a, b);
-            return dist != 0 ? 1.0 / dist : 1;
+            return dist != 0 ? (double)b.Length / (double)(dist + b.Length) : 1;
         }
     }
     static class LevenshteinDistance
