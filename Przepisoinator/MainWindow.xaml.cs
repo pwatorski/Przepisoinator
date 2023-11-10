@@ -21,17 +21,31 @@ namespace Przepisoinator
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<RecepyListViewItem> RecepieListItems;
         public MainWindow()
         {
             InitializeComponent();
-
-            using(var sr = new StreamReader("test_rtb.json"))
-
-            mainTabControl.Items.Add(new RecepyTabItem(new RecepyView(Recepy.FromJson(sr.ReadToEnd()))));
-
+            RecepieListItems = new List<RecepyListViewItem>();
+            Settings.Load();
+            Settings.Save();
+            Directory.CreateDirectory(Settings.MainStoragePath);
+            Directory.CreateDirectory(Settings.RecepyStoragePath);
+            LoadRecepies();
+            listView_recepies.ItemsSource = RecepieListItems;
             //BaseGrid.Children.Add(new parentRecepy());
 
-            MeasurementUnit.SaveAllToDirectory("measurements");
+            //MeasurementUnit.LoadAllFromDir(Settings.UnitsStoragePath);
+            MeasurementUnit.SaveAllToDirectory(Settings.UnitsStoragePath);
+        }
+
+        void LoadRecepies()
+        {
+            RecepieListItems = new List<RecepyListViewItem>();
+            foreach(var path in Directory.EnumerateFiles(Settings.RecepyStoragePath))
+            {
+                using var sr = new StreamReader(path);
+                RecepieListItems.Add(new RecepyListViewItem(Recepy.FromJson(sr.ReadToEnd())));
+            }
         }
 
 
@@ -42,10 +56,36 @@ namespace Przepisoinator
             mainTabControl.Items.RemoveAt(tab.TabIndex);
         }
 
-        private void button_units_Click(object sender, RoutedEventArgs e)
+        private void listView_recepies_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var win2 = new UnitEditWindow();
-            win2.Show();
+            RecepyListViewItem? item = ((FrameworkElement)e.OriginalSource).DataContext as RecepyListViewItem;
+            if (item != null)
+            {
+                mainTabControl.Items.Add(new RecepyTabItem(new RecepyView(item.Recepy)));
+            }
+        }
+
+        private void button_addRecepy_Click(object sender, RoutedEventArgs e)
+        {
+            Recepy newRecepy = Recepy.GetNewRecepy();
+            var recepyItemView = new RecepyListViewItem(newRecepy);
+            RecepieListItems.Add(recepyItemView);
+            listView_recepies.Items.Refresh();
+            var newRecepyVew = new RecepyView(newRecepy);
+            var newTab = new RecepyTabItem(newRecepyVew);
+            mainTabControl.Items.Add(newTab);
+            newTab.Focus();
+            newRecepyVew.SetMode(true);
+        }
+
+        private void button_importRecepy_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void button_exportRecepy_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -7,24 +7,53 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid Name="BaseGrid">
-        <ListBox HorizontalContentAlignment="Stretch" Margin="644,217,10,84" d:ItemsSource="{d:SampleData ItemCount=5}" Name="listBox_recepies">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0,2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="100" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}" />
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
         <TabControl Name="mainTabControl" ScrollViewer.CanContentScroll="True" >
             <TabItem Header="Menu" Height="27" Margin="0,0,0,0">
-                <Button Name="button_units" HorizontalAlignment="Left" VerticalAlignment="Top" Click="button_units_Click">
-                    Jednostki
-                </Button>
+                <Grid>
+                    <TabControl TabStripPlacement="Left">
+                        <TabItem Header="Przepisy
+">
+                            <Grid Background="#FFE5E5E5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="200"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition MinWidth="200"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <WrapPanel Orientation="Horizontal">
+                                        <Button Name="button_addRecepy" Content="Dodaj" HorizontalAlignment="Left" Margin="2,2,0,0" VerticalAlignment="Top" Click="button_addRecepy_Click"/>
+                                        <Button Name="button_importRecepy" Content="Importuj" HorizontalAlignment="Left" Margin="2,2,0,0" VerticalAlignment="Top" Click="button_importRecepy_Click"/>
+                                        <Button Name="button_exportRecepy" Content="Eksportuj" HorizontalAlignment="Left" Margin="2,2,0,0" VerticalAlignment="Top" Click="button_exportRecepy_Click" IsEnabled="False"/>
+                                    </WrapPanel>
+                                </Grid>
+                                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                                <ListView Name="listView_recepies" Margin="0,0,0,0" MouseDoubleClick="listView_recepies_MouseDoubleClick" Grid.Column="2" Grid.ColumnSpan="1">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Nazwa" Width="auto" DisplayMemberBinding="{Binding Name}"/>
+                                            <GridViewColumn Header="Tagi" Width="auto" DisplayMemberBinding="{Binding TagString}"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Jednostki">
+                            <Grid Background="#FFE5E5E5">
+                                <local:UnitConversionEditView>
+
+                                </local:UnitConversionEditView>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Opcje">
+                            <Grid Background="#FFE5E5E5">
+                                <local:SettingsPage>
+
+                                </local:SettingsPage>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

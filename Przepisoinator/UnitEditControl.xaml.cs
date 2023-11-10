@@ -17,12 +17,12 @@ using System.Windows.Threading;
 namespace Przepisoinator
 {
     /// <summary>
-    /// Logika interakcji dla klasy UnitEditView.xaml
+    /// Logika interakcji dla klasy UnitEditControl.xaml
     /// </summary>
-    public partial class UnitEditView : UserControl
+    public partial class UnitEditControl : UserControl
     {
         public MeasurementUnit MeasurementUnit { get; protected set; }
-        UnitEditWindow ParentWindow;
+        UnitConversionEditView ParentPage;
         bool Focused = false;
         public bool Edited = false;
         static readonly SolidColorBrush FocusColor = new(Color.FromRgb(0xFF, 0xFF, 0xFF));
@@ -30,13 +30,14 @@ namespace Przepisoinator
         static readonly SolidColorBrush HighlightColor = new(Color.FromRgb(0xF8, 0xF8, 0xF8));
 
         string OryginalName = string.Empty;
-        string OryginalShortName10 = string.Empty;
-        string OryginamName = string.Empty;
+        string OryginalShortName = string.Empty;
+        bool OryginalhideShortName = true;
+        bool initialized = false;
 
-        public UnitEditView(UnitEditWindow parentWindow, MeasurementUnit measurementUnit)
+        public UnitEditControl(UnitConversionEditView parentWindow, MeasurementUnit measurementUnit)
         {
             InitializeComponent();
-            ParentWindow = parentWindow;
+            ParentPage = parentWindow;
             MeasurementUnit = measurementUnit;
             textBox_fullName.Text = MeasurementUnit.Name ;
             textBox_shortName.Text = MeasurementUnit.Symbol;
@@ -44,6 +45,16 @@ namespace Przepisoinator
             {
                 checkBox_onlyName.IsChecked = true;
             }
+            SetupOriginalValues();
+
+            initialized = true;
+        }
+
+        private void SetupOriginalValues()
+        {
+            OryginalName = MeasurementUnit.Name;
+            OryginalShortName = MeasurementUnit.Symbol;
+            OryginalhideShortName = MeasurementUnit.OnlyName;
         }
 
         private void button_save_Click(object sender, RoutedEventArgs e)
@@ -51,6 +62,8 @@ namespace Przepisoinator
             MeasurementUnit.Name = textBox_fullName.Text;
             MeasurementUnit.Symbol = textBox_shortName.Text;
             MeasurementUnit.OnlyName = checkBox_onlyName.IsChecked ?? false;
+            SetupOriginalValues();
+            UpdateEditStatus(false);
         }
 
         private void button_remove_Click(object sender, RoutedEventArgs e)
@@ -60,25 +73,52 @@ namespace Przepisoinator
 
         private void textBox_shortName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Edited = true;
-            ParentWindow.UpdateBar();
+            if (!initialized)
+                return;
+            
+            UpdateEditStatus(OryginalShortName != textBox_shortName.Text);
         }
 
         private void textBox_fullName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Edited = true;
+            if (!initialized)
+                return;
+            
+            UpdateEditStatus(OryginalName != textBox_fullName.Text);
         }
 
         private void checkBox_onlyName_Checked(object sender, RoutedEventArgs e)
         {
-            textBox_shortName.Visibility = Visibility.Collapsed;
-            Edited = true;
+            if (!initialized)
+                return;
+            //textBox_shortName.Visibility = Visibility.Collapsed;
+            textBox_shortName.IsEnabled = false;
+            UpdateEditStatus(OryginalhideShortName != true);
         }
 
         private void checkBox_onlyName_Unchecked(object sender, RoutedEventArgs e)
         {
-            textBox_shortName.Visibility = Visibility.Visible;
-            Edited = true;
+            if (!initialized)
+                return;
+            //textBox_shortName.Visibility = Visibility.Visible;
+            textBox_shortName.IsEnabled = true;
+            UpdateEditStatus(OryginalhideShortName != false);
+        }
+
+        protected void UpdateEditStatus(bool edited)
+        {
+            if (edited == Edited)
+                return;
+            Edited = edited;
+            if(Edited)
+            {
+                button_save.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                button_save.Visibility = Visibility.Collapsed;
+            }
+            ParentPage.UpdateBar();
         }
 
         public void FocusSelect(bool focus)
@@ -96,7 +136,7 @@ namespace Przepisoinator
 
         private void grid_base_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ParentWindow.FocusOnView(this);
+            ParentPage.FocusOnView(this);
         }
 
         private void grid_base_MouseLeave(object sender, MouseEventArgs e)
@@ -124,7 +164,7 @@ namespace Przepisoinator
 
         private void grid_base_GotFocus(object sender, RoutedEventArgs e)
         {
-            ParentWindow.FocusOnView(this);
+            ParentPage.FocusOnView(this);
         }
     }
 }

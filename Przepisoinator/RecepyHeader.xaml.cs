@@ -34,5 +34,10 @@ namespace Przepisoinator
                 //Parent.OpenNewWindow();
             }
         }
+
+        private void button_close_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

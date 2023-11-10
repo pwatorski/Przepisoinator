@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="Przepisoinator.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Przepisoinator"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Folder aplikacji:" VerticalAlignment="Top"/>
+        <Button Name="button_saveAppDir" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top" Height="20" Click="button_saveAppDir_Click">
+            <TextBlock Margin="0,-1,0,0">
+                Zmień
+            </TextBlock>
+        </Button>
+        <TextBox Name="textBox_appDir" Margin="52,28,10,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Height="20" IsReadOnly="True"/>
+    </Grid>
+</UserControl>
+ 

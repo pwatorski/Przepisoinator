@@ -17,7 +17,7 @@ namespace Przepisoinator
         {
             set
             {
-                ((RecepyHeader)this.Header).label_TabTitle.Content = value;
+                ((RecepyHeader)Header).label_TabTitle.Content = value;
             }
         }
 
@@ -28,7 +28,7 @@ namespace Przepisoinator
             // Create an instance of the usercontrol
             closableTabHeader = new RecepyHeader(this);
             // Assign the usercontrol to the tab header
-            this.Header = closableTabHeader;
+            Header = closableTabHeader;
             Title = recepyView.Recepy.Name;
             // Attach to the CloseableHeader events
             // (Mouse Enter/Leave, Button Click, and Label resize)
@@ -46,32 +46,34 @@ namespace Przepisoinator
 
         void SetVisible(bool visible)
         {
-            var button_close = ((RecepyHeader)this.Header).button_close;
+            var button_close = ((RecepyHeader)Header).button_close;
             button_close.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
         }
 
         // Button MouseEnter - When the mouse is over the button - change color to Red
         void button_close_MouseEnter(object sender, MouseEventArgs e)
         {
-            ((RecepyHeader)this.Header).button_close.FontWeight = FontWeights.Bold;
+            ((RecepyHeader)Header).button_close.FontWeight = FontWeights.Bold;
         }
         // Button MouseLeave - When mouse is no longer over button - change color back to black
         void button_close_MouseLeave(object sender, MouseEventArgs e)
         {
-            ((RecepyHeader)this.Header).button_close.FontWeight = FontWeights.Normal;
+            ((RecepyHeader)Header).button_close.FontWeight = FontWeights.Normal;
         }
         // Button Close Click - Remove the Tab - (or raise
         // an event indicating a "CloseTab" event has occurred)
         void button_close_Click(object sender, RoutedEventArgs e)
         {
-            ((TabControl)this.Parent).Items.Remove(this);
+            RecepyView.Unind(this, RecepyView);
+            ((TabControl)Parent).Items.Remove(this);
+            
         }
         // Label SizeChanged - When the Size of the Label changes
         // (due to setting the Title) set position of button properly
         void label_TabTitle_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            ((RecepyHeader)this.Header).button_close.Margin = new Thickness(
-               ((RecepyHeader)this.Header).label_TabTitle.ActualWidth + 5, 3, 4, 0);
+            ((RecepyHeader)Header).button_close.Margin = new Thickness(
+               ((RecepyHeader)Header).label_TabTitle.ActualWidth + 5, 3, 4, 0);
         }
 
         // Override OnSelected - Show the Close Button
@@ -91,10 +93,10 @@ namespace Przepisoinator
         internal void OpenNewWindow()
         {
             RemoveLogicalChild(RecepyView);
-            ((TabControl)this.Parent).Items.Remove(this);
+            ((TabControl)Parent).Items.Remove(this);
             var w = new RecepyWindow(RecepyView);
             w.Show();
-            
+
         }
     }
 }

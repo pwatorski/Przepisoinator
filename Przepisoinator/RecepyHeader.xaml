@@ -11,7 +11,7 @@
           Name="button_close" VerticalAlignment="Top" Width="20" FontFamily="Courier" 
           FontWeight="Normal"  Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
           FontStretch="Normal" Visibility="Visible" 
-          FontSize="14" Padding="0" ToolTip="Close">
+          FontSize="14" Padding="0" ToolTip="Close" Click="button_close_Click">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>

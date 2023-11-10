@@ -17,9 +17,9 @@ using System.Windows.Threading;
 namespace Przepisoinator
 {
     /// <summary>
-    /// Logika interakcji dla klasy IngredientView.xaml
+    /// Logika interakcji dla klasy RecepyIngredientControl.xaml
     /// </summary>
-    public partial class IngredientView : UserControl
+    public partial class RecepyIngredientControl : UserControl
     {
         RecepyView parentRecepy;
         public bool EditMode;
@@ -46,7 +46,7 @@ namespace Przepisoinator
         public string Text { get => ingredient.Unit==MeasurementUnit.BasicUnit? ingredient.ActiveName: $"{ingredient.ActiveName} {ingredient.Value} {ingredient.Unit.ShortName}"; }
         public static readonly int IndentWidth = 20;
 
-        public IngredientView(RecepyView recepyView, RecepyIngredient? recepyIngredient=null)
+        public RecepyIngredientControl(RecepyView recepyView, RecepyIngredient? recepyIngredient=null)
         {
             InitializeComponent();
             parentRecepy = recepyView;

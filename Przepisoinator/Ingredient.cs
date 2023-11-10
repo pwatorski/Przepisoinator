@@ -23,11 +23,11 @@ namespace Przepisoinator
             BasicIngredient = new Ingredient("Nic");
         }
 
-        public Ingredient(string name, long? id=null)
+        public Ingredient(string name, long? id = null)
         {
             Name = name;
             LowerName = name.ToLower();
-            if (id != null )
+            if (id != null)
             {
                 ID = (long)id;
             }

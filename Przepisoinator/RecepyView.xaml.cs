@@ -42,14 +42,14 @@ namespace Przepisoinator
 
             foreach (var i in Recepy.Ingredients)
             {
-                stackPanel_ingredients.Children.Add(new IngredientView(this, i));
+                stackPanel_ingredients.Children.Add(new RecepyIngredientControl(this, i));
             }
 
             foreach (var t in Recepy.Tags)
             {
                 wrapPanel_tags.Children.Insert(wrapPanel_tags.Children.Count - 1, new TagView(this, t));
             }
-            stackPanel_ingredients.Children.Add(new IngredientView(this));
+            stackPanel_ingredients.Children.Add(new RecepyIngredientControl(this));
             //wrapPanel_tags.Children.Add(new TagView(this));
 
             UpdateNameBox();
@@ -143,11 +143,11 @@ namespace Przepisoinator
             }
         }
 
-        internal void AddNewIngredient(IngredientView callerIngredient)
+        internal void AddNewIngredient(RecepyIngredientControl callerIngredient)
         {
             callerIngredient.HideRemoveButton(false);
             var index = stackPanel_ingredients.Children.IndexOf(callerIngredient) + 1;
-            var newIngredient = new IngredientView(this);
+            var newIngredient = new RecepyIngredientControl(this);
             if (index >= stackPanel_ingredients.Children.Count) 
             {
                 stackPanel_ingredients.Children.Add(newIngredient);
@@ -160,12 +160,12 @@ namespace Przepisoinator
             
         }
 
-        internal void RemoveIngredient(IngredientView ingrediebtView)
+        internal void RemoveIngredient(RecepyIngredientControl ingrediebtView)
         {
             stackPanel_ingredients.Children.Remove(ingrediebtView);
             if(stackPanel_ingredients.Children.Count == 1)
             {
-                ((IngredientView)stackPanel_ingredients.Children[0]).HideRemoveButton(true);
+                ((RecepyIngredientControl)stackPanel_ingredients.Children[0]).HideRemoveButton(true);
             }
         }
 
@@ -238,7 +238,7 @@ namespace Przepisoinator
 
         private void Save()
         {
-            Recepy.Ingredients = stackPanel_ingredients.Children.OfType<IngredientView>().Where(x=>!x.Empty).Select(x => x.GetIngredient()).ToList();
+            Recepy.Ingredients = stackPanel_ingredients.Children.OfType<RecepyIngredientControl>().Where(x=>!x.Empty).Select(x => x.GetIngredient()).ToList();
             Recepy.Tags = wrapPanel_tags.Children.OfType<TagView>().Select(x => x.textBox_name.Text).ToList();
             Recepy.DescriptionFlow = rtb_description.Document;
 
@@ -254,12 +254,12 @@ namespace Przepisoinator
                     }
                 }
             }
-
-            using (var sw = new StreamWriter($"test_rtb.json"))
+            
+            using (var sw = new StreamWriter(System.IO.Path.Join(Settings.RecepyStoragePath, $"{Recepy.ID}.json")))
             {
                 sw.Write(Recepy.ToJson());
             }
-            ;
+            
         }
 
         private void button_cancel_Click(object sender, RoutedEventArgs e)
@@ -267,7 +267,7 @@ namespace Przepisoinator
             SetMode(!EditMode);
         }
 
-        protected void SetMode(bool editMode)
+        public void SetMode(bool editMode)
         {
             EditMode = editMode;
             if (EditMode)
@@ -299,7 +299,7 @@ namespace Przepisoinator
                 textBlock_tags.Visibility = Visibility.Collapsed;
             }
             UpdateNameBox();
-            foreach (var i in stackPanel_ingredients.Children.OfType<IngredientView>())
+            foreach (var i in stackPanel_ingredients.Children.OfType<RecepyIngredientControl>())
             {
                 i.SetMode(editMode);
             }
@@ -340,7 +340,7 @@ namespace Przepisoinator
             AddNewTag(button_addTag);
         }
 
-        internal void TryInsertClipboardIngredients(IngredientView callerIngredient)
+        internal void TryInsertClipboardIngredients(RecepyIngredientControl callerIngredient)
         {
             var index = stackPanel_ingredients.Children.IndexOf(callerIngredient);
 
@@ -357,7 +357,7 @@ namespace Przepisoinator
                         index += 1;
                         foreach(var ri in RecepyIngredient.TryParseFromText(l))
                             stackPanel_ingredients.Children.Insert(index,
-                                new IngredientView(this,ri));
+                                new RecepyIngredientControl(this,ri));
                     }
                 }
                 if (success)
@@ -366,6 +366,11 @@ namespace Przepisoinator
                 }
             }
 
+        }
+
+        internal void Unind(RecepyTabItem recepyTabItem, RecepyView recepyView)
+        {
+            recepyView.rtb_description.Document = new FlowDocument();
         }
     }
 }

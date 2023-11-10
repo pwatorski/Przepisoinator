@@ -5,6 +5,14 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DataClasses\" />
+    <Folder Include="UI\Controls\" />
+    <Folder Include="UI\Views\" />
+    <Folder Include="UI\Windows\" />
+  </ItemGroup>
 
 </Project>

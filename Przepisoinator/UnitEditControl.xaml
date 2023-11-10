@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Przepisoinator.UnitEditView"
+﻿<UserControl x:Class="Przepisoinator.UnitEditControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -21,6 +21,7 @@
                 HorizontalAlignment="Left" VerticalAlignment="Center" 
                 Height="19" Margin="2,0,1,0"
                 Click="button_save_Click" VerticalContentAlignment="Center"
+                Visibility="Collapsed"
                 >
             <TextBlock Margin="2,-1,2,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left">Zapisz</TextBlock>
             <Button.Resources>

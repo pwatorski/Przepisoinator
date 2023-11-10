@@ -12,8 +12,8 @@ namespace Przepisoinator
 {
     public class RecepyIngredient
     {
-        
-        public long UnitId { get=>Unit.ID; set=>Unit=MeasurementUnit.AllUnits[value]; }
+
+        public long UnitId { get => Unit.ID; set => Unit = MeasurementUnit.AllUnits[value]; }
         [JsonIgnore]
         public string ActiveName { get => Name; }
         public string Name { get; set; }
@@ -23,10 +23,10 @@ namespace Przepisoinator
         public int Indent { get; set; }
 
         [JsonConstructor]
-        public RecepyIngredient(string name, long unitId, double value, int indent=0)
+        public RecepyIngredient(string name, long unitId, double value, int indent = 0)
         {
             Name = name;
-            Unit = MeasurementUnit.AllUnits[unitId];
+            Unit = MeasurementUnit.GetUnit(unitId);
             Value = value;
             Indent = indent;
         }
@@ -46,7 +46,7 @@ namespace Przepisoinator
 
         public bool ConvertInPlace(MeasurementUnit? newUnit)
         {
-            if(newUnit == null)
+            if (newUnit == null)
             {
                 return false;
             }
@@ -116,7 +116,7 @@ namespace Przepisoinator
 
         public static List<RecepyIngredient> TryParseFromText(string text)
         {
-            var words = text.Split(' ').Where(x=>x.Length > 0).ToList();
+            var words = text.Split(' ').Where(x => x.Length > 0).ToList();
 
 
             if (words.Count == 0) return new List<RecepyIngredient>();
@@ -124,9 +124,9 @@ namespace Przepisoinator
             double value = 1;
             int wordCount = words.Count;
 
-            if (text.Count(x => x == ',')>1)
+            if (text.Count(x => x == ',') > 1)
             {
-                return text.Split(',').Select(x => TryParseFromText(x.Trim())).SelectMany(x=>x).ToList();
+                return text.Split(',').Select(x => TryParseFromText(x.Trim())).SelectMany(x => x).ToList();
             }
 
             // Look from the start
@@ -136,7 +136,7 @@ namespace Przepisoinator
             }
 
             var ingreientTest = TryParseUnitFirst(words, 1);
-            if(ingreientTest.Unit.ID != MeasurementUnit.BasicUnit.ID)
+            if (ingreientTest.Unit.ID != MeasurementUnit.BasicUnit.ID)
             {
                 return new List<RecepyIngredient>() { ingreientTest };
             }

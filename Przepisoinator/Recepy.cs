@@ -18,7 +18,7 @@ namespace Przepisoinator
         {
             Name = "Przepis",
             ID = -1,
-            Ingredients = new List<RecepyIngredient>() { new RecepyIngredient("", MeasurementUnit.BasicUnit, 1)},
+            Ingredients = new List<RecepyIngredient>() { new RecepyIngredient("", MeasurementUnit.BasicUnit, 1) },
 
         };
         public string Name { get; set; } = "";
@@ -26,29 +26,35 @@ namespace Przepisoinator
         [JsonIgnore]
         public FlowDocument DescriptionFlow { get; set; }
 
-        public JsonFlowDocument FlowJsonDocument 
+        public JsonFlowDocument FlowJsonDocument
         {
             get
             {
                 return JsonFlowDocument.FromDocument(DescriptionFlow);
             }
-            set 
+            set
             {
                 DescriptionFlow = value.ToFlowDocument();
-            } 
+            }
         }
-        public long ID { get; protected set; } = 0;
+
+        public string DescriptionText { get => new TextRange(DescriptionFlow.ContentStart, DescriptionFlow.ContentEnd).Text; }
+        public long ID { get; protected set; } = long.MaxValue;
         public List<RecepyIngredient> Ingredients { get; set; }
         public int ServingCount { get; set; }
         public List<string> Tags { get; set; }
         public double Rating { get; set; }
         public bool Tried { get; set; }
 
-        public Recepy() 
+        public Recepy()
         {
             DescriptionFlow = new FlowDocument();
             Ingredients = new List<RecepyIngredient>();
             Tags = new List<string>();
+            if(ID == long.MaxValue)
+            {
+                ID= DateTime.Now.ToFileTime();
+            }
         }
 
         public string ToJson()
@@ -64,7 +70,7 @@ namespace Przepisoinator
 
         internal void RemoveTag(int index)
         {
-            if(index > 0 && index < Tags.Count)
+            if (index > 0 && index < Tags.Count)
                 Tags.RemoveAt(index);
         }
 
@@ -77,6 +83,14 @@ namespace Przepisoinator
         public static Recepy GetEmptyRecepy()
         {
             return new Recepy();
+        }
+
+        internal static Recepy GetNewRecepy()
+        {
+            return new Recepy()
+            {
+                Name = "Nowy przepis"
+            };
         }
     }
 }

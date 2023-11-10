@@ -46,7 +46,7 @@ namespace Przepisoinator
         }
         public static JsonFlowDocument FromDocument(FlowDocument? flowDocument)
         {
-            if(flowDocument == null)
+            if (flowDocument == null)
             {
                 return new JsonFlowDocument(new List<JsonFlowParagraph>());
             }
@@ -55,10 +55,10 @@ namespace Przepisoinator
         }
         public static JsonFlowDocument FromJson(string json)
         {
-            var flow = JsonSerializer.Deserialize<JsonFlowDocument>(json) ?? 
+            var flow = JsonSerializer.Deserialize<JsonFlowDocument>(json) ??
                 new JsonFlowDocument(
-                    new List<JsonFlowParagraph>() 
-                    { 
+                    new List<JsonFlowParagraph>()
+                    {
                         new JsonFlowParagraph(
                             new List<JsonFlowInline>())
                     });
@@ -127,7 +127,7 @@ namespace Przepisoinator
         [JsonIgnore]
         public FontWeight FontWeight { get => FontWeight.FromOpenTypeWeight(FontWeightID); }
 
-        public JsonFlowInline(string text="", bool isItallic=false, int fontWeightID=400, bool isBreakline=false)
+        public JsonFlowInline(string text = "", bool isItallic = false, int fontWeightID = 400, bool isBreakline = false)
         {
             Text = text;
             IsItallic = isItallic;
@@ -138,9 +138,9 @@ namespace Przepisoinator
 
         public static JsonFlowInline FromInline(Inline inline)
         {
-            if(inline.GetType() == typeof(LineBreak))
+            if (inline.GetType() == typeof(LineBreak))
             {
-                return new JsonFlowInline(isBreakline:true);
+                return new JsonFlowInline(isBreakline: true);
             }
             return new JsonFlowInline(
                 inline.ContentStart.GetTextInRun(LogicalDirection.Forward),
