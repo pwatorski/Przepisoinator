@@ -6,3 +6,4 @@ Planowane funkcje dodatkowe:
 - Linkowanie między przepisami (sugestia podania z...?)
 - Skalowanie szerokości zakładek
 - Możliwość tworzenia podlist w składnikach (NOWE BB)
+- Możliwość dodania alternatywnej jednostki składnika
